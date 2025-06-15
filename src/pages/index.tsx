@@ -1,4 +1,4 @@
-import LogMonitor from "@/features/logs";
+import LogMonitor from "@/features/logMonitor";
 
 export default function Home() {
   return (

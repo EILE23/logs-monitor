@@ -13,7 +13,7 @@ const levelTextColorMap: Record<string, string> = {
   DEBUG: "text-blue-500",
 };
 
-const getTailwindTextColor = (level: string) =>
+const getTextColor = (level: string) =>
   levelTextColorMap[level] || "text-gray-500";
 
 const LogTable = ({ logs, onSortChange }: LogTableProps) => {
@@ -78,7 +78,7 @@ const LogTable = ({ logs, onSortChange }: LogTableProps) => {
               <td className="border p-2 whitespace-nowrap">{log.timestamp}</td>
               <td className="border p-2">
                 <span
-                  className={`inline-block px-2 py-1 rounded font-semibold ${getTailwindTextColor(
+                  className={`inline-block px-2 py-1 rounded font-semibold ${getTextColor(
                     log.level
                   )}`}
                 >

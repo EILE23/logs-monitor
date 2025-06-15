@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LogTable from "@/components/logtable";
 import Panel from "@/components/panel";
-import Boards from "@/components/dashboard";
+import Boards from "@/components/boards";
 import { LogEntry } from "../components/types";
 import { renderPageNumbers } from "../../utils/pagenation";
 
