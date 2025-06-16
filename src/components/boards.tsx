@@ -7,12 +7,12 @@ interface Props {
 const Boards = ({ logs }: Props) => {
   const totalCount = logs.length;
 
-  const recentHour = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const recentErrors = logs.filter(
-    (log) =>
-      log.level === "ERROR" && new Date(log.timestamp).getTime() >= recentHour
-  ).length;
+  const userCount = logs.reduce((acc: Record<string, number>, log) => {
+    acc[log.userId] = (acc[log.userId] || 0) + 1;
+    return acc;
+  }, {});
 
+  const topUser = Object.entries(userCount).sort((a, b) => b[1] - a[1])[0]?.[0];
   //숫자 합산
   const levelCount = logs.reduce((acc: Record<string, number>, log) => {
     acc[log.level] = (acc[log.level] || 0) + 1;
@@ -39,8 +39,8 @@ const Boards = ({ logs }: Props) => {
         <p className="text-xl font-bold">{totalCount.toLocaleString()}</p>
       </div>
       <div className="p-4 border rounded shadow bg-white">
-        <h3 className="text-sm text-gray-500">최근 7일 내 ERROR</h3>
-        <p className="text-xl font-bold text-red-600">{recentErrors}</p>
+        <h3 className="text-sm text-gray-500">최다 User ID</h3>
+        <p className="text-xl font-bold">{topUser}</p>
       </div>
       <div className="p-4 border rounded shadow bg-white">
         <h3 className="text-sm text-gray-500">최다 Level</h3>

@@ -13,6 +13,7 @@ const levelTextColorMap: Record<string, string> = {
   DEBUG: "text-blue-500",
 };
 
+//텍스트 색상
 const getTextColor = (level: string) =>
   levelTextColorMap[level] || "text-gray-500";
 
@@ -30,7 +31,7 @@ const LogTable = ({ logs, onSortChange }: LogTableProps) => {
     if (onSortChange) onSortChange(field, order);
   };
 
-  const getSortIndicator = (field: keyof LogEntry) => {
+  const sortChange = (field: keyof LogEntry) => {
     if (sortField !== field) return "";
     return sortOrder === "asc" ? " ↑" : " ↓";
   };
@@ -44,31 +45,31 @@ const LogTable = ({ logs, onSortChange }: LogTableProps) => {
               className="border p-2 text-left cursor-pointer"
               onClick={() => handleSort("timestamp")}
             >
-              Time{getSortIndicator("timestamp")}
+              Time{sortChange("timestamp")}
             </th>
             <th
               className="border p-2 text-left cursor-pointer"
               onClick={() => handleSort("level")}
             >
-              Level{getSortIndicator("level")}
+              Level{sortChange("level")}
             </th>
             <th
               className="border p-2 text-left cursor-pointer"
               onClick={() => handleSort("service")}
             >
-              Service{getSortIndicator("service")}
+              Service{sortChange("service")}
             </th>
             <th
               className="border p-2 text-left cursor-pointer"
               onClick={() => handleSort("message")}
             >
-              Message{getSortIndicator("message")}
+              Message{sortChange("message")}
             </th>
             <th
               className="border p-2 text-left cursor-pointer"
               onClick={() => handleSort("userId")}
             >
-              User ID{getSortIndicator("userId")}
+              User ID{sortChange("userId")}
             </th>
           </tr>
         </thead>

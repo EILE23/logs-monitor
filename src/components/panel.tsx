@@ -8,11 +8,13 @@ interface PanelProps {
 const COLORS = ["#f87171", "#fb923c", "#4ade80", "#60a5fa"];
 
 const Panel = ({ logs }: PanelProps) => {
+  //합산
   const levelCounts = logs.reduce<Record<string, number>>((acc, log) => {
     acc[log.level] = (acc[log.level] || 0) + 1;
     return acc;
   }, {});
 
+  //key : level, count : number
   const data = Object.entries(levelCounts).map(([level, count]) => ({
     name: level,
     value: count,

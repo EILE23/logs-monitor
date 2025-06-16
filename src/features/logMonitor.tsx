@@ -13,7 +13,7 @@ const LogMonitor = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<keyof LogEntry | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const pageSize = 20;
+  const pageSize = 10;
 
   useEffect(() => {
     fetch("/logs_20000.json")
@@ -21,15 +21,12 @@ const LogMonitor = () => {
       .then((data) => setLogs(data));
   }, []);
 
-  const oneHourAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const hourAgo = Date.now() - 60 * 60 * 1000;
 
-  const filteredLogs = logs
+  const logData = logs
     .filter((log) => {
       const timestamp = new Date(log.timestamp).getTime();
-      if (
-        filterRecentError &&
-        (log.level !== "ERROR" || timestamp < oneHourAgo)
-      ) {
+      if (filterRecentError && (log.level !== "ERROR" || timestamp < hourAgo)) {
         return false;
       }
 
@@ -59,8 +56,8 @@ const LogMonitor = () => {
       return 0;
     });
 
-  const totalPages = Math.ceil(filteredLogs.length / pageSize);
-  const paginatedLogs = filteredLogs.slice(
+  const totalPages = Math.ceil(logData.length / pageSize);
+  const paginatedLogs = logData.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -69,7 +66,7 @@ const LogMonitor = () => {
     const headers = ["timestamp", "level", "service", "message", "userId"];
     const csvContent = [
       headers.join(","),
-      ...filteredLogs.map((log) =>
+      ...logData.map((log) =>
         headers.map((field) => `"${log[field as keyof LogEntry]}"`).join(",")
       ),
     ].join("\n");
@@ -88,6 +85,10 @@ const LogMonitor = () => {
       prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]
     );
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchKeyword, filterRecentError, filterLevels]);
 
   return (
     <div className="p-8 max-w-screen-xl mx-auto">
@@ -129,8 +130,8 @@ const LogMonitor = () => {
         </button>
       </div>
       <div className="flex flex-col md:flex-row gap-6 mb-6">
-        <Panel logs={filteredLogs} />
-        <Boards logs={filteredLogs} />
+        <Panel logs={logData} />
+        <Boards logs={logData} />
       </div>
       <LogTable
         logs={paginatedLogs}
