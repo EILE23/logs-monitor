@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { LogEntry } from "./types";
 
 interface Props {
@@ -7,30 +8,29 @@ interface Props {
 const Boards = ({ logs }: Props) => {
   const totalCount = logs.length;
 
-  const userCount = logs.reduce((acc: Record<string, number>, log) => {
-    acc[log.userId] = (acc[log.userId] || 0) + 1;
-    return acc;
-  }, {});
+  const topUser = useMemo(() => {
+    const userCount = logs.reduce((acc: Record<string, number>, log) => {
+      acc[log.userId] = (acc[log.userId] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(userCount).sort((a, b) => b[1] - a[1])[0]?.[0];
+  }, [logs]);
 
-  const topUser = Object.entries(userCount).sort((a, b) => b[1] - a[1])[0]?.[0];
-  //숫자 합산
-  const levelCount = logs.reduce((acc: Record<string, number>, log) => {
-    acc[log.level] = (acc[log.level] || 0) + 1;
-    return acc;
-  }, {});
+  const commonLevel = useMemo(() => {
+    const levelCount = logs.reduce((acc: Record<string, number>, log) => {
+      acc[log.level] = (acc[log.level] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(levelCount).sort((a, b) => b[1] - a[1])[0]?.[0];
+  }, [logs]);
 
-  const commonLevel = Object.entries(levelCount).sort(
-    (a, b) => b[1] - a[1]
-  )[0]?.[0];
-
-  const serviceCount = logs.reduce((acc: Record<string, number>, log) => {
-    acc[log.service] = (acc[log.service] || 0) + 1;
-    return acc;
-  }, {});
-
-  const topService = Object.entries(serviceCount).sort(
-    (a, b) => b[1] - a[1]
-  )[0]?.[0];
+  const topService = useMemo(() => {
+    const serviceCount = logs.reduce((acc: Record<string, number>, log) => {
+      acc[log.service] = (acc[log.service] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(serviceCount).sort((a, b) => b[1] - a[1])[0]?.[0];
+  }, [logs]);
 
   return (
     <div className="grid grid-cols-2 gap-4 w-full max-w-md">

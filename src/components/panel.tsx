@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { LogEntry } from "./types";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -8,20 +9,19 @@ interface PanelProps {
 const COLORS = ["#f87171", "#fb923c", "#4ade80", "#60a5fa"];
 
 const Panel = ({ logs }: PanelProps) => {
-  //합산
-  const levelCounts = logs.reduce<Record<string, number>>((acc, log) => {
-    acc[log.level] = (acc[log.level] || 0) + 1;
-    return acc;
-  }, {});
-
-  //key : level, count : number
-  const data = Object.entries(levelCounts).map(([level, count]) => ({
-    name: level,
-    value: count,
-  }));
+  const data = useMemo(() => {
+    const levelCounts = logs.reduce<Record<string, number>>((acc, log) => {
+      acc[log.level] = (acc[log.level] || 0) + 1;
+      return acc;
+    }, {});
+    return Object.entries(levelCounts).map(([level, count]) => ({
+      name: level,
+      value: count,
+    }));
+  }, [logs]);
 
   return (
-    <div className="w-full h-64 mb-6">
+    <div className="w-full h-64 mb-6 min-h-[256px] overflow-hidden">
       <ResponsiveContainer>
         <PieChart>
           <Pie

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import LogTable from "@/components/logtable";
+import LogTable from "@/components/logTable";
 import Panel from "@/components/panel";
 import Boards from "@/components/boards";
 import { LogEntry } from "../components/types";
